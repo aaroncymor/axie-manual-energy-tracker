@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>A Basic HTML5 Template</title>
+  <meta name="description" content="A simple HTML5 Template for new projects.">
+  <meta name="author" content="SitePoint">
+
+  <meta property="og:title" content="A Basic HTML5 Template">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
+  <meta property="og:description" content="A simple HTML5 Template for new projects.">
+  <meta property="og:image" content="image.png">
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+
+  <style>
+    .axie-enemy-logs {
+      height: 200px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid black;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    .axie-logs-placeholder {
+      color: grey;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- your content here... -->
+  <div id="axieManualEnemyTracker">
+    <div class="axie-screen-history">
+      <div class="axie-current-round">
+        <h3>Round</h3>
+        <p></p>
+      </div>
+      <div class="axie-current-energy">
+        <p>Enemy Current Energy</p>
+        <p class="axie-enemy-current-energy"></p>
+      </div>
+      <div id="axieEnemyLogs" class="axie-enemy-logs">
+        <p id="axieLogsPlaceholder" class="axie-logs-placeholder">Enemy logs here...</p>
+      </div>
+    </div>
+    <div class="axie-enemy-button-containers">
+      <div class="axie-enemy-one-counter">
+        <div>1</div>
+        <button class="axie-one-plus">+</button>
+        <button class="axie-one-minus">-</button>
+      </div>
+    </div>
+    <button class="axie-endturn">End Turn</button>
+  </div>
+
+  <!-- script here -->
+  <script>
+
+    function placeholderDisappear() {
+      let axieLogsPlaceholder = document.getElementById('axieLogsPlaceholder');
+      if (axieLogsPlaceholder != null) {
+        axieLogsPlaceholder.style.display = "none";
+      }
+    }
+
+    let currentRound = document.querySelector(".axie-current-round");
+    let enemyCurrentEnergy = document.querySelector(".axie-enemy-current-energy");
+
+    // initialize
+    currentRound.children[1].textContent = "1";
+    enemyCurrentEnergy.textContent = "3";
+
+    const enemyLogs = document.getElementById('axieEnemyLogs');
+
+    let energySpent = 0;
+    let energyGained = 0;
+
+    const onePlusButton = document.querySelector(".axie-one-plus");
+    onePlusButton.addEventListener('click', (e) => {
+      placeholderDisappear();
+
+      let message = "Your enemy gains 1 energy.";
+      let historyText = document.createElement('p');
+      historyText.textContent = message;
+      enemyLogs.prepend(historyText);
+
+      energyGained += 1;
+    });
+    const oneMinusButton = document.querySelector(".axie-one-minus");
+    oneMinusButton.addEventListener('click', (e) => {
+      placeholderDisappear();
+      let message = "Your enemy spends/loses 1 energy.";
+      let historyText = document.createElement('p');
+      historyText.textContent = message;
+      enemyLogs.prepend(historyText);
+
+      energySpent += 1;
+    });
+    const endTurnButton = document.querySelector(".axie-endturn");
+    endTurnButton.addEventListener('click', (e) => {
+      placeholderDisappear();
+      let tempRound = parseInt(currentRound.children[1].textContent);
+
+      let endTurnContainer = document.createElement('div');
+
+      let message = `Round ${tempRound} ends. Both of you gain 2 energy.`;
+      let historyText = document.createElement('p');
+      historyText.textContent = message;
+      endTurnContainer.append(historyText);
+
+      let summary = `Enemy gained ${energyGained} energy and spent/lost ${energySpent} energy`;
+      let summaryText = document.createElement('p');
+      summaryText.textContent = summary;
+      endTurnContainer.append(summaryText);
+
+      enemyLogs.prepend(endTurnContainer);
+
+      currentRound.children[1].textContent = String(tempRound + 1);
+
+      let tempEnemyCurrentEnergy = parseInt(enemyCurrentEnergy.textContent);
+      tempEnemyCurrentEnergy += energyGained;
+      tempEnemyCurrentEnergy -= energySpent;
+      tempEnemyCurrentEnergy += 2; // gains energy every end of turn
+
+      enemyCurrentEnergy.textContent = String(tempEnemyCurrentEnergy);
+
+      // reset energy spent ang gained count
+      energySpent = 0;
+      energyGained = 0;
+    });
+  </script>
+</body>
+</html>
