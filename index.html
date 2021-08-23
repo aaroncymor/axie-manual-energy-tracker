@@ -29,8 +29,82 @@
       border-radius: 5px;
       padding: 10px;
     }
+
     .axie-logs-placeholder {
       color: grey;
+    }
+
+    .axie-current-round {
+      text-align: center;
+    }
+
+    .axie-current-energy p,
+    .axie-current-energy h3,
+    .axie-current-round p,
+    .axie-current-round h3 {
+      display: inline-flex;
+    }
+
+    .axie-enemy-one-counter {
+      display: flex;
+      flex-direction: row;
+      position: relative;
+    }
+
+    .axie-one-ctr-container {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      right: 5px;
+    }
+
+    .axie-gain-history {
+      color: green;
+    }
+
+    .axie-lose-history {
+      color: red;
+    }
+
+    .axie-endturn-history {
+      color: blue;
+    }
+
+    .axie-endturn-container {
+      background: lightgrey;
+      width: 250px;
+    }
+
+    .axie-enemy-button-containers {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .axie-enemy-button-containers > .axie-enemy-one-counter {
+      flex-basis: 15%;
+    }
+
+    .axie-enemy-button-containers > .axie-endturn {
+      flex-basis: 85%;
+      height: 44px;
+    }
+
+    .axie-one-energy-label {
+      font-size: 35px;
+    }
+
+    /* Media Queries */
+    @media (min-width: 768px) {
+
+    }
+
+    @media (min-width: 1024px) {
+
+    }
+
+    @media (min-width: 1200px) {
+
     }
   </style>
 </head>
@@ -40,12 +114,12 @@
   <div id="axieManualEnemyTracker">
     <div class="axie-screen-history">
       <div class="axie-current-round">
-        <h3>Round</h3>
-        <p></p>
+        <p>Round</p>
+        <h3></h3>
       </div>
       <div class="axie-current-energy">
-        <p>Enemy Current Energy</p>
-        <p class="axie-enemy-current-energy"></p>
+        <p>Enemy Energy:</p>
+        <h3 class="axie-enemy-current-energy"></h3>
       </div>
       <div id="axieEnemyLogs" class="axie-enemy-logs">
         <p id="axieLogsPlaceholder" class="axie-logs-placeholder">Enemy logs here...</p>
@@ -53,12 +127,15 @@
     </div>
     <div class="axie-enemy-button-containers">
       <div class="axie-enemy-one-counter">
-        <div>1</div>
-        <button class="axie-one-plus">+</button>
-        <button class="axie-one-minus">-</button>
+        <div class="axie-one-energy-label">1</div>
+        <div class="axie-one-ctr-container">
+          <button class="axie-one-minus">-</button>
+          <button class="axie-one-plus">+</button>
+        </div>
       </div>
+
+      <button class="axie-endturn">End Turn</button>
     </div>
-    <button class="axie-endturn">End Turn</button>
   </div>
 
   <!-- script here -->
@@ -90,6 +167,7 @@
       let message = "Your enemy gains 1 energy.";
       let historyText = document.createElement('p');
       historyText.textContent = message;
+      historyText.classList.add('axie-gain-history');
       enemyLogs.prepend(historyText);
 
       energyGained += 1;
@@ -100,6 +178,7 @@
       let message = "Your enemy spends/loses 1 energy.";
       let historyText = document.createElement('p');
       historyText.textContent = message;
+      historyText.classList.add('axie-lose-history');
       enemyLogs.prepend(historyText);
 
       energySpent += 1;
@@ -114,6 +193,7 @@
       let message = `Round ${tempRound} ends. Both of you gain 2 energy.`;
       let historyText = document.createElement('p');
       historyText.textContent = message;
+      historyText.classList.add('axie-endturn-history');
       endTurnContainer.append(historyText);
 
       let summary = `Enemy gained ${energyGained} energy and spent/lost ${energySpent} energy`;
@@ -121,6 +201,7 @@
       summaryText.textContent = summary;
       endTurnContainer.append(summaryText);
 
+      endTurnContainer.classList.add('axie-endturn-container');
       enemyLogs.prepend(endTurnContainer);
 
       currentRound.children[1].textContent = String(tempRound + 1);
