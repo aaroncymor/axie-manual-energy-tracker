@@ -161,6 +161,9 @@
       border-top: 1px solid #242735;
       border-bottom: 1px solid #242735;
       border-left: 0px;
+      font-family: 'Roboto Slab', serif;
+      font-size: 1.3em;
+      text-transform: uppercase;
     }
 
     .axie-one-energy-label {
@@ -168,6 +171,24 @@
       font-size: 35px;
       position: absolute;
       left: 14%;
+    }
+
+    .axie-other-button-containers {
+      margin-top: 15px;
+    }
+
+    .axie-reset {
+      background: #c6bdd4;
+      font-size: 1.3em;
+      cursor: pointer;
+      width: 100%;
+      font-family: 'Roboto Slab', serif;
+      text-transform: uppercase;
+      height: 45px;
+      border: 1px solid #242735;
+      border-radius: 0px;
+      display: block;
+      margin: 0 auto;
     }
 
     /* Media Queries */
@@ -221,6 +242,9 @@
         </div>
 
         <button class="axie-endturn">End Turn</button>
+      </div>
+      <div class="axie-other-button-containers">
+        <button class="axie-reset">Reset</button>
       </div>
     </div>
   </main>
@@ -303,6 +327,15 @@
       // reset energy spent ang gained count
       energySpent = 0;
       energyGained = 0;
+    });
+    const resetButton = document.querySelector('.axie-reset');
+    resetButton.addEventListener('click', (e)=> {
+      axieEnemyLogs.innerHTML = '';
+      const placeholder = document.createElement('p');
+      placeholder.textContent = 'Enemy logs here...';
+      placeholder.classList.add('axie-logs-placeholder');
+      placeholder.id = 'axieLogsPlaceholder';
+      axieEnemyLogs.append(placeholder);
     });
   </script>
 </body>
