@@ -4,34 +4,53 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>A Basic HTML5 Template</title>
-  <meta name="description" content="A simple HTML5 Template for new projects.">
-  <meta name="author" content="SitePoint">
+  <title>Axie Arena Energy Counter</title>
+  <meta name="description" content="Axie Arena Energy Tracker">
+  <meta name="author" content="Aaron Cymor">
 
-  <meta property="og:title" content="A Basic HTML5 Template">
+  <meta property="og:title" content="Axie Arena Energy Tracker">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
-  <meta property="og:description" content="A simple HTML5 Template for new projects.">
-  <meta property="og:image" content="image.png">
+  <!--<meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">-->
+  <meta property="og:description" content="A simple Axie Arena Energy Tracker">
+  <!--<meta property="og:image" content="image.png">-->
 
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    main {
+      height: 100%;
+      background: #3a3f50;
+    }
+
+    .container {
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
     .axie-enemy-logs {
       height: 200px;
       max-height: 200px;
       overflow-y: auto;
-      border: 1px solid black;
-      border-radius: 5px;
+      border: 1px solid #beceff;
+      /*border-radius: 5px;*/
       padding: 10px;
     }
 
     .axie-logs-placeholder {
-      color: grey;
+      color: #beceff;
+      opacity: 0.5;
     }
 
     .axie-current-round {
@@ -43,6 +62,18 @@
     .axie-current-round p,
     .axie-current-round h3 {
       display: inline-flex;
+      font-family: 'Robot Slab', serif;
+      color: #fff;
+    }
+
+    .axie-current-energy p,
+    .axie-current-round p,
+    .axie-current-round h3 {
+      font-size: 1.45em;
+    }
+
+    .axie-current-energy h3 {
+      font-size: 2em;
     }
 
     .axie-enemy-one-counter {
@@ -55,15 +86,23 @@
       display: flex;
       flex-direction: column;
       position: absolute;
-      right: 5px;
+      right: 0px;
+    }
+
+    .axie-logs-placeholder,
+    .axie-gain-history,
+    .axie-lose-history,
+    .axie-endturn-container {
+      font-family: 'Roboto Slab', serif;
+      font-weight: 400;
     }
 
     .axie-gain-history {
-      color: green;
+      color: #6cc000;
     }
 
     .axie-lose-history {
-      color: red;
+      color: #ff5341;
     }
 
     .axie-endturn-history {
@@ -71,8 +110,18 @@
     }
 
     .axie-endturn-container {
-      background: lightgrey;
-      width: 250px;
+      border: 1px solid #c6bdd4;
+      /*width: 100%;*/
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .axie-endturn-container p:first-child {
+      color: #00b8ce;
+    }
+
+    .axie-endturn-container p:last-child {
+      color: #ff8bbd;
     }
 
     .axie-enemy-button-containers {
@@ -83,20 +132,54 @@
 
     .axie-enemy-button-containers > .axie-enemy-one-counter {
       flex-basis: 15%;
+      border: 1px solid #242735;
+      height: 46px;
+    }
+
+    .axie-one-minus,
+    .axie-one-plus {
+      width: 23.3px;
+      height: 23.3px;
+      border: 1px solid #242735;
+    }
+
+    .axie-one-plus,
+    .axie-one-minus,
+    .axie-endturn {
+      cursor: pointer;
+      box-shadow: none;
+      border-radius: 0px;
+      background: #6b7185;
+      color: #fff;
     }
 
     .axie-enemy-button-containers > .axie-endturn {
       flex-basis: 85%;
-      height: 44px;
+      height: 48px;
+      cursor: pointer;
+      border-right: 1px solid #242735;
+      border-top: 1px solid #242735;
+      border-bottom: 1px solid #242735;
+      border-left: 0px;
     }
 
     .axie-one-energy-label {
+      color: #ffb812;
       font-size: 35px;
+      position: absolute;
+      left: 14%;
     }
 
     /* Media Queries */
     @media (min-width: 768px) {
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
 
+      .axie-one-energy-label {
+        left: 26%;
+      }
     }
 
     @media (min-width: 1024px) {
@@ -106,38 +189,41 @@
     @media (min-width: 1200px) {
 
     }
-  </style>
+  </style> <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
   <!-- your content here... -->
-  <div id="axieManualEnemyTracker">
-    <div class="axie-screen-history">
-      <div class="axie-current-round">
-        <p>Round</p>
-        <h3></h3>
-      </div>
-      <div class="axie-current-energy">
-        <p>Enemy Energy:</p>
-        <h3 class="axie-enemy-current-energy"></h3>
-      </div>
-      <div id="axieEnemyLogs" class="axie-enemy-logs">
-        <p id="axieLogsPlaceholder" class="axie-logs-placeholder">Enemy logs here...</p>
-      </div>
-    </div>
-    <div class="axie-enemy-button-containers">
-      <div class="axie-enemy-one-counter">
-        <div class="axie-one-energy-label">1</div>
-        <div class="axie-one-ctr-container">
-          <button class="axie-one-minus">-</button>
-          <button class="axie-one-plus">+</button>
+  <main>
+    <div id="axieManualEnemyTracker" class="container">
+      <div class="axie-screen-history row">
+        <div class="axie-current-round">
+          <p>Round</p>
+          <h3></h3>
+        </div>
+        <div class="axie-current-energy">
+          <p>Enemy Energy:</p>
+          <h3 class="axie-enemy-current-energy"></h3>
+        </div>
+        <div id="axieEnemyLogs" class="axie-enemy-logs">
+          <p id="axieLogsPlaceholder" class="axie-logs-placeholder">Enemy logs here...</p>
         </div>
       </div>
+      <div class="axie-enemy-button-containers row">
+        <div class="axie-enemy-one-counter">
+          <div class="axie-one-energy-label">1</div>
+          <div class="axie-one-ctr-container">
+            <button class="axie-one-minus">-</button>
+            <button class="axie-one-plus">+</button>
+          </div>
+        </div>
 
-      <button class="axie-endturn">End Turn</button>
+        <button class="axie-endturn">End Turn</button>
+      </div>
     </div>
-  </div>
-
+  </main>
   <!-- script here -->
   <script>
 
@@ -199,6 +285,7 @@
       let summary = `Enemy gained ${energyGained} energy and spent/lost ${energySpent} energy`;
       let summaryText = document.createElement('p');
       summaryText.textContent = summary;
+      summaryText.classList.add('axie-summary-round');
       endTurnContainer.append(summaryText);
 
       endTurnContainer.classList.add('axie-endturn-container');
