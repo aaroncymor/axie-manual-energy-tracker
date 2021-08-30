@@ -108,6 +108,21 @@
     .axie-endturn-history {
       color: blue;
     }
+    .axie-summary-round span:first-child,
+    .axie-summary-round span:last-child,
+    .axie-endturn-history span {
+      font-weight: 600;
+      font-size: 1.4em;
+    }
+
+    .axie-endturn-history span,
+    .axie-summary-round span:first-child {
+      color: #6cc000;
+    }
+
+    .axie-summary-round span:last-child {
+      color: #ff5341;
+    }
 
     .axie-endturn-container {
       border: 1px solid #c6bdd4;
@@ -116,12 +131,16 @@
       border-radius: 5px;
     }
 
-    .axie-endturn-container p:first-child {
+    /*.axie-endturn-container p:first-child {
       color: #00b8ce;
     }
 
     .axie-endturn-container p:last-child {
       color: #ff8bbd;
+    }*/
+
+    .axie-endturn-container p {
+      color: #fff;
     }
 
     .axie-enemy-button-containers {
@@ -285,7 +304,7 @@
     const oneMinusButton = document.querySelector(".axie-one-minus");
     oneMinusButton.addEventListener('click', (e) => {
       placeholderDisappear();
-      let message = "Your enemy spends/loses 1 energy.";
+      let message = "Enemy spends/loses 1 energy.";
       let historyText = document.createElement('p');
       historyText.textContent = message;
       historyText.classList.add('axie-lose-history');
@@ -300,15 +319,17 @@
 
       let endTurnContainer = document.createElement('div');
 
-      let message = `Round ${tempRound} ends. Both of you gain 2 energy.`;
+      let message = `Round ${tempRound} ends. Enemy gains <span>2</span> energy.`;
       let historyText = document.createElement('p');
-      historyText.textContent = message;
+      historyText.innerHTML = message;
       historyText.classList.add('axie-endturn-history');
       endTurnContainer.append(historyText);
 
-      let summary = `Enemy gained ${energyGained} energy and spent/lost ${energySpent} energy`;
+      let summary = `Enemy gained <span>${energyGained}</span> energy and `
+      summary += `spent/lost <span>${energySpent}</span> energy`;
+
       let summaryText = document.createElement('p');
-      summaryText.textContent = summary;
+      summaryText.innerHTML = summary;
       summaryText.classList.add('axie-summary-round');
       endTurnContainer.append(summaryText);
 
@@ -339,6 +360,8 @@
 
       currentRound.children[1].textContent = "1";
       enemyCurrentEnergy.textContent = "3";
+      energySpent = 0;
+      energyGained = 0;
     });
   </script>
 </body>
