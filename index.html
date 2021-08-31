@@ -97,6 +97,7 @@
       font-weight: 400;
     }
 
+    .axie-summary-round span:first-child,
     .axie-gain-history {
       color: #6cc000;
     }
@@ -105,18 +106,20 @@
       color: #ff5341;
     }
 
-    .axie-endturn-history {
-      color: blue;
-    }
+    .axie-endturn-history span:last-child,
     .axie-summary-round span:first-child,
-    .axie-summary-round span:last-child,
-    .axie-endturn-history span {
+    .axie-summary-round span:last-child {
       font-weight: 600;
       font-size: 1.4em;
     }
 
-    .axie-endturn-history span,
-    .axie-summary-round span:first-child {
+    .axie-endturn-history span:first-child {
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .axie-endturn-history span:last-child,
+    .axie-summary-round span:last-child {
       color: #6cc000;
     }
 
@@ -338,7 +341,7 @@
 
       let endTurnContainer = document.createElement('div');
 
-      let message = `Round ${tempRound} ends. Enemy gains <span>2</span> energy.`;
+      let message = `<span>Round ${tempRound} ends.</span> Enemy gains <span>2</span> energy.`;
       let historyText = document.createElement('p');
       historyText.innerHTML = message;
       historyText.classList.add('axie-endturn-history');
