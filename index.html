@@ -176,7 +176,7 @@
     }
 
     .axie-enemy-button-containers > .axie-endturn {
-      flex-basis: 85%;
+      flex-basis: 75%;
       height: 48px;
       cursor: pointer;
       border-right: 1px solid #242735;
@@ -186,6 +186,23 @@
       font-family: 'Roboto Slab', serif;
       font-size: 1.3em;
       text-transform: uppercase;
+    }
+
+    .axie-enemy-button-containers > .axie-undo {
+      flex-basis: 10%;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-top: 1px solid #242735;
+      border-bottom: 1px solid #242735;
+      border-right: 1px solid #242735;
+      background: #142558;
+    }
+
+    .axie-enemy-button-containers > .axie-undo > .fa-undo {
+      color: #fff;
     }
 
     .axie-one-energy-label {
@@ -254,6 +271,10 @@
   </style> <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+      integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm"
+      crossorigin="anonymous">
 </head>
 
 <body>
@@ -281,7 +302,7 @@
             <button class="axie-one-plus">+</button>
           </div>
         </div>
-
+        <a class="axie-undo"><i class="fas fa-undo"></i></a>
         <button class="axie-endturn">End Round</button>
       </div>
       <div class="axie-other-button-containers">
@@ -315,31 +336,41 @@
     onePlusButton.addEventListener('click', (e) => {
       placeholderDisappear();
 
+      let tempRound = parseInt(currentRound.children[1].textContent);
+
       let message = "Your enemy gains 1 energy.";
       let historyText = document.createElement('p');
       historyText.textContent = message;
       historyText.classList.add('axie-gain-history');
+      historyText.setAttribute('data-axie-round', tempRound);
       enemyLogs.prepend(historyText);
 
       energyGained += 1;
     });
+
     const oneMinusButton = document.querySelector(".axie-one-minus");
     oneMinusButton.addEventListener('click', (e) => {
       placeholderDisappear();
+
+      let tempRound = parseInt(currentRound.children[1].textContent);
+
       let message = "Enemy spends/loses 1 energy.";
       let historyText = document.createElement('p');
       historyText.textContent = message;
       historyText.classList.add('axie-lose-history');
+      historyText.setAttribute('data-axie-round', tempRound);
       enemyLogs.prepend(historyText);
 
       energySpent += 1;
     });
+
     const endTurnButton = document.querySelector(".axie-endturn");
     endTurnButton.addEventListener('click', (e) => {
       placeholderDisappear();
       let tempRound = parseInt(currentRound.children[1].textContent);
 
       let endTurnContainer = document.createElement('div');
+      endTurnContainer.setAttribute('data-axie-round', tempRound);
 
       let message = `<span>Round ${tempRound} ends.</span> Enemy gains <span>2</span> energy.`;
       let historyText = document.createElement('p');
@@ -367,10 +398,23 @@
 
       enemyCurrentEnergy.textContent = String(tempEnemyCurrentEnergy);
 
+      // save to round details to localStorage before end turn
+      let roundDetails = {
+        'energyGained': energyGained,
+        'energySpent': energySpent,
+        'round': tempRound
+      }
+      window.localStorage.setItem(`round${tempRound}`,
+            JSON.stringify(roundDetails));
+
       // reset energy spent ang gained count
       energySpent = 0;
       energyGained = 0;
+
+      //console.log(enemyLogs.children);
+      //console.log(enemyLogs.children.length);
     });
+
     const resetButton = document.querySelector('.axie-reset');
     resetButton.addEventListener('click', (e)=> {
       axieEnemyLogs.innerHTML = '';
@@ -384,7 +428,44 @@
       enemyCurrentEnergy.textContent = "3";
       energySpent = 0;
       energyGained = 0;
+
+      // remove all session
+      localStorage.clear();
     });
+
+    const undoButton = document.querySelector('.axie-undo');
+    undoButton.addEventListener('click', (e) => {
+      // get current round minus 1
+      let prevRound = parseInt(currentRound.children[1].textContent) - 1;
+      if (prevRound < 1){
+        alert("No more data.");
+        return
+      }
+
+      let prevRoundDetails = window.localStorage.getItem(`round${prevRound}`);
+      prevRoundDetails = JSON.parse(prevRoundDetails);
+
+      // change round value
+      currentRound.children[1].textContent = String(prevRoundDetails.round);
+      prevEnemyEnergy = parseInt(enemyCurrentEnergy.textContent);
+      prevEnemyEnergy -= prevRoundDetails.energyGained;
+      prevEnemyEnergy += prevRoundDetails.energySpent;
+      // round bonus energy
+      prevEnemyEnergy -= 2;
+
+      enemyCurrentEnergy.textContent = String(prevEnemyEnergy);
+      enemyLogsChildren = [...enemyLogs.children];
+      enemyLogsChildren.forEach(child => {
+        let dataAxieRound = child.getAttribute('data-axie-round');
+        if (dataAxieRound == prevRound) {
+          child.remove();
+        }
+      });
+
+      if (prevRound == 1){
+        axieLogsPlaceholder.style.display = "block";
+      }
+    })
   </script>
 </body>
 </html>
